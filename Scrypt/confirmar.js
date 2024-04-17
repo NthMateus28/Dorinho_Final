@@ -143,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mensagem += `*Frete:* ${pedido.frete}\n\n`;
         mensagem += `*Total:* ${pedido.total}\n\n\n`;
 
-
         const linkWhatsApp = `https://api.whatsapp.com/send?phone=5554991965403&text=${encodeURIComponent(
             mensagem
         )}`;
@@ -229,71 +228,68 @@ document.addEventListener("DOMContentLoaded", () => {
     const enviarPedidoButton = document.getElementById("enviarPedidoButton");
     enviarPedidoButton.addEventListener("click", enviarPedidoWhatsApp);
 
-    // function enviarDadosParaSheetmonkey() {
-    //     const url = "https://api.sheetmonkey.io/form/fabosBaewTP8XPKB4EV8Xh";
+    function enviarDadosParaSheetmonkey() {
+        const url = "https://api.sheetmonkey.io/form/hLxooDBhCHFYaBi5N2BcLi";
 
-    //     const nome = document.getElementById("nome").value;
-    //     const telefone = document.getElementById("telefone").value;
-    //     const tipoRetirada = document.querySelector(
-    //         'input[name="retirada"]:checked'
-    //     ).value;
-    //     const bairro = document.getElementById("bairros").value;
-    //     const endereco = document.getElementById("endereco").value;
-    //     const formaPagamento = document.getElementById("formaPagamento").value;
-    //     const somaProdutos = document.getElementById("finalPrice").textContent;
-    //     const frete = document.getElementById("finalFrete").textContent;
-    //     const total = document.getElementById("finalTotal").textContent;
+        const nome = document.getElementById("nome").value;
+        const telefone = document.getElementById("telefone").value;
+        const tipoRetirada = document.querySelector(
+            'input[name="retirada"]:checked'
+        ).value;
+        const bairro = document.getElementById("bairros").value;
+        const endereco = document.getElementById("endereco").value;
+        const formaPagamento = document.getElementById("formaPagamento").value;
+        const somaProdutos = document.getElementById("finalPrice").textContent;
+        const frete = document.getElementById("finalFrete").textContent;
+        const total = document.getElementById("finalTotal").textContent;
 
-    //     const produtos = [];
-    //     let produtosString = ""; // Cabeçalhos das colunas
+        // Obter produtos do localStorage
+        const sabores = JSON.parse(localStorage.getItem("saboresSelecionados"));
+        let produtosString = ""; // String formatada para representar os produtos
 
-    //     for (let i = 0; i < localStorage.length; i++) {
-    //         let key = localStorage.key(i);
-    //         if (key.startsWith("produto_")) {
-    //             let produto = JSON.parse(localStorage.getItem(key));
-    //             produtosString += `Nome: ${produto.nome}\nQuantidade: ${produto.quantidade}\nValor: ${produto.valor}\n\n`;
-    //         }
-    //     }
+        // Montar string de produtos
+        sabores.forEach((produto) => {
+            produtosString += `Sabor: ${produto.sabor}\nQuantidade: ${produto.quantidade}\n\n`;
+        });
 
-    //     const data = {
-    //         Nome: nome,
-    //         Telefone: telefone,
-    //         "Tipo de retirada": tipoRetirada,
-    //         Bairro: bairro,
-    //         Endereco: endereco,
-    //         "Forma de pagamento": formaPagamento,
-    //         "Soma dos produtos": somaProdutos,
-    //         Frete: frete,
-    //         Total: total,
-    //         Produtos: produtosString, // Agora é uma string formatada com quebras de linha para cada produto
-    //         // Adicione mais campos conforme necessário
-    //     };
+        const data = {
+            Nome: nome,
+            Telefone: telefone,
+            "Tipo de retirada": tipoRetirada,
+            Bairro: bairro,
+            Endereco: endereco,
+            "Forma de pagamento": formaPagamento,
+            "Soma dos produtos": somaProdutos,
+            Frete: frete,
+            Total: total,
+            Produtos: produtosString, // Produtos formatados
+        };
 
-    //     fetch(url, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(data),
-    //     })
-    //         .then((response) => {
-    //             if (response.ok) {
-    //                 console.log(
-    //                     "Dados enviados com sucesso para o Sheetmonkey!"
-    //                 );
-    //                 localStorage.removeItem("pedido");
-    //             } else {
-    //                 console.error(
-    //                     "Erro ao enviar dados para o Sheetmonkey:",
-    //                     response.status
-    //                 );
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error(
-    //                 "Erro ao enviar dados para o Sheetmonkey:",
-    //                 error
-    //             );
-    //         });
-    // }
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    console.log(
+                        "Dados enviados com sucesso para o Sheetmonkey!"
+                    );
+                    localStorage.removeItem("pedido");
+                } else {
+                    console.error(
+                        "Erro ao enviar dados para o Sheetmonkey:",
+                        response.status
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error(
+                    "Erro ao enviar dados para o Sheetmonkey:",
+                    error
+                );
+            });
+    }
 });
